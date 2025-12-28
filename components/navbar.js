@@ -51,7 +51,7 @@ class CustomNavbar extends HTMLElement {
                         <button id="theme-toggle" class="theme-toggle p-2 rounded-full hover:bg-black/10">
                             <i data-feather="moon" class="text-white"></i>
                         </button>
-                        <a href="https://github.com/yourusername/steammark-converter" target="_blank" rel="noopener noreferrer" class="github-icon p-2 rounded-full hover:bg-black/10 transition-transform">
+                        <a href="https://github.com/hashtafak/steammark-magic-wand" target="_blank" rel="noopener noreferrer" class="github-icon p-2 rounded-full hover:bg-black/10 transition-transform">
                             <i data-feather="github" class="text-white"></i>
                         </a>
                     </div>
