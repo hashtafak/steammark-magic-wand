@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SteamMark Magic Wand</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="components/navbar.js"></script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-8 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Markdown Input -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold">Markdown Input</h2>
+                        <button id="clear-markdown" class="p-2 rounded-full hover:bg-black/10 transition-colors">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <textarea id="markdown-input"
+                    class="w-full h-96 p-4 dark:bg-gray-700 dark:text-gray-200 focus:outline-none resize-none"
+                    placeholder="Type or paste your Markdown here..."></textarea>
+            </div>
+
+            <!-- BBCode Output -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-teal-400 p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold">Steam BBCode Output</h2>
+                        <button id="copy-bbcode" class="p-2 rounded-full hover:bg-black/10 transition-colors">
+                            <i data-feather="copy"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="bbcode-output"
+                    class="w-full h-96 p-4 dark:bg-gray-700 dark:text-gray-200 overflow-y-auto whitespace-pre-wrap">
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-6 flex flex-wrap gap-4 justify-center">
+            <button id="convert-btn"
+                class="px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg shadow-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+                <i data-feather="wand"></i>
+                Convert to BBCode
+            </button>
+            <button id="preview-btn"
+                class="px-6 py-3 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-lg shadow-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+                <i data-feather="eye"></i>
+                Preview
+            </button>
+            <button id="help-btn"
+                class="px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg shadow-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+                <i data-feather="help-circle"></i>
+                Formatting Guide
+            </button>
+        </div>
+    </main>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="bg-gradient-to-r from-teal-500 to-blue-500 p-4 text-white flex justify-between items-center">
+                <h3 class="text-xl font-bold">Preview</h3>
+                <button id="close-preview" class="p-2 rounded-full hover:bg-black/10 transition-colors">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div id="preview-content" class="p-6 overflow-y-auto max-h-[80vh] dark:bg-gray-700 dark:text-gray-200">
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-4 text-white flex justify-between items-center">
+                <h3 class="text-xl font-bold">Formatting Guide</h3>
+                <button id="close-help" class="p-2 rounded-full hover:bg-black/10 transition-colors">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[80vh] dark:bg-gray-700 dark:text-gray-200">
+                <div class="prose dark:prose-invert max-w-none">
+                    <h3 class="text-lg font-semibold mb-2">Markdown to Steam BBCode Conversion</h3>
+                    <p class="mb-4">This tool converts standard Markdown formatting to Steam-compatible BBCode. Here's
+                        what gets converted:</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Headers</h4>
+                            <p><code># Header 1</code> → <code>[h1]Header 1[/h1]</code></p>
+                            <p><code>## Header 2</code> → <code>[h2]Header 2[/h2]</code></p>
+                            <p><code>### Header 3</code> → <code>[h3]Header 3[/h3]</code></p>
+                        </div>
+
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Text Formatting</h4>
+                            <p><code>*italic*</code> → <code>[i]italic[/i]</code></p>
+                            <p><code>**bold**</code> → <code>[b]bold[/b]</code></p>
+                            <p><code>~~strikethrough~~</code> → <code>[strike]strikethrough[/strike]</code></p>
+                        </div>
+
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Lists</h4>
+                            <p><code>- Item 1</code> → <code>[list][*]Item 1[/list]</code></p>
+                            <p><code>1. Item 1</code> → <code>[olist][*]Item 1[/olist]</code></p>
+                        </div>
+
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">Links & Images</h4>
+                            <p><code>[text](url)</code> → <code>[url=url]text[/url]</code></p>
+                            <p><code>![alt](src)</code> → <code>[img]src[/img]</code></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>feather.replace();</script>
+
+</body>
+
+</html>
