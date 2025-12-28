@@ -1,5 +1,5 @@
 ---
-title: SteamMark Magic Wand 🪄
+title: SteamMark Magic Wand
 colorFrom: pink
 colorTo: purple
 emoji: 🐳
